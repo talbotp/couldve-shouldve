@@ -1,0 +1,35 @@
+service: api
+app: couldve-shouldve
+org: talbotp
+
+frameworkVersion: '2'
+
+plugins: 
+  - serverless-plugin-typescript
+  - serverless-offline
+
+custom: 
+  wwwDomain: www.couldveshouldve.com 
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: prod
+  region: eu-west-1
+  httpApi:
+    cors:
+      allowedOrigins:
+        - https://${self:custom.wwwDomain}
+      allowedHeaders:
+        - Content-Type
+        - Authorization
+      allowedMethods:
+        - GET
+
+functions:
+  crypto:
+    handler: src/crypto.handler
+    events: 
+      - httpApi: 
+          path: /crypto 
+          method: GET
